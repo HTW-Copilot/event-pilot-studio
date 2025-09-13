@@ -181,7 +181,12 @@ const HTWDashboard = () => {
                     Start Your Event
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-white/30 text-white hover:bg-white/10"
+                  onClick={() => window.open("https://docs.google.com/document/d/1zbvleFX0UXH1xKMa_tGzeei-lGx_QCGUsMcbzHWl5Vk/edit?tab=t.0", "_blank")}
+                >
                   <FileText className="mr-2 h-5 w-5" />
                   View Guide
                 </Button>

@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ChevronLeft, ChevronRight, Lightbulb, FileText, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { JourneyTracker, type JourneyStep } from "@/components/JourneyTracker";
+import honoluluSkyline from "@/assets/honolulu-skyline.png";
 
 const Wizard = () => {
   const [currentStep, setCurrentStep] = useState("idea");
@@ -59,18 +61,80 @@ const Wizard = () => {
     { id: "generate", title: "Generate Plan", icon: Sparkles }
   ];
 
+  const journeySteps: JourneyStep[] = [
+    { 
+      step: 1, 
+      title: "Welcome & Orientation", 
+      description: "Get familiar with HTW hosting",
+      completed: true,
+      current: false
+    },
+    { 
+      step: 2, 
+      title: "Draft Event Idea", 
+      description: "Create your event concept",
+      completed: currentStep === "details" || currentStep === "generate",
+      current: currentStep === "idea"
+    },
+    { 
+      step: 3, 
+      title: "Pick Venue & Time", 
+      description: "Select location and schedule",
+      completed: currentStep === "generate",
+      current: currentStep === "details"
+    },
+    { 
+      step: 4, 
+      title: "Budget & Logistics", 
+      description: "Plan resources and requirements",
+      completed: false,
+      current: false
+    },
+    { 
+      step: 5, 
+      title: "Submit for Review", 
+      description: "Final review and approval",
+      completed: false,
+      current: currentStep === "generate"
+    }
+  ];
+
+  const getCurrentStepNumber = () => {
+    if (currentStep === "idea") return 2;
+    if (currentStep === "details") return 3;
+    if (currentStep === "generate") return 5;
+    return 2;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-subtle py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-              Event Creation Wizard
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Let's bring your event idea to life in just 3 simple steps
-            </p>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-teal-50 to-blue-50 relative overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 opacity-20 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${honoluluSkyline})` }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white/80" />
+      
+      <div className="relative z-10 py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold mb-4 text-foreground">
+                Draft Your Event in <span className="text-primary">Paradise</span>
+              </h1>
+              <p className="text-muted-foreground text-lg">
+                Let's bring your event idea to life with our guided process
+              </p>
+            </div>
+
+            {/* Journey Tracker */}
+            <div className="mb-8">
+              <JourneyTracker 
+                steps={journeySteps}
+                currentStep={getCurrentStepNumber()}
+                totalSteps={5}
+              />
+            </div>
 
           <Tabs value={currentStep} onValueChange={setCurrentStep} className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-8">
@@ -260,6 +324,7 @@ const Wizard = () => {
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             )}
+          </div>
           </div>
         </div>
       </div>
