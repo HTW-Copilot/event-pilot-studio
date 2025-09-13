@@ -45,63 +45,76 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchUserProfile = async (userId: string) => {
+      try {
+        // Fetch user profile from our users table
+        const { data: profile } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+        
+        if (profile) {
+          setUser({
+            id: profile.id,
+            email: profile.email,
+            name: profile.name,
+            roles: profile.roles || ['event_host'],
+            org: profile.org,
+            bio: profile.bio,
+            phone: profile.phone,
+            avatar: profile.avatar_url,
+            verified_at: profile.verified_at
+          });
+        } else {
+          // Create user profile if it doesn't exist (event_host by default)
+          const { data: newProfile } = await supabase
+            .from('users')
+            .insert({
+              id: userId,
+              email: session?.user?.email!,
+              name: session?.user?.user_metadata?.name || session?.user?.email!.split('@')[0],
+              roles: ['event_host']
+            })
+            .select()
+            .single();
+          
+          if (newProfile) {
+            setUser({
+              id: newProfile.id,
+              email: newProfile.email,
+              name: newProfile.name,
+              roles: newProfile.roles || ['event_host'],
+              org: newProfile.org,
+              bio: newProfile.bio,
+              phone: newProfile.phone,
+              avatar: newProfile.avatar_url,
+              verified_at: newProfile.verified_at
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        // Only synchronous state updates here
         setSession(session);
         
         if (session?.user) {
-          // Fetch user profile from our users table
-          const { data: profile } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: profile.email,
-              name: profile.name,
-              roles: profile.roles || ['event_host'],
-              org: profile.org,
-              bio: profile.bio,
-              phone: profile.phone,
-              avatar: profile.avatar_url,
-              verified_at: profile.verified_at
-            });
-          } else {
-            // Create user profile if it doesn't exist (event_host by default)
-            const { data: newProfile } = await supabase
-              .from('users')
-              .insert({
-                id: session.user.id,
-                email: session.user.email!,
-                name: session.user.user_metadata?.name || session.user.email!.split('@')[0],
-                roles: ['event_host']
-              })
-              .select()
-              .single();
-            
-            if (newProfile) {
-              setUser({
-                id: newProfile.id,
-                email: newProfile.email,
-                name: newProfile.name,
-                roles: newProfile.roles || ['event_host'],
-                org: newProfile.org,
-                bio: newProfile.bio,
-                phone: newProfile.phone,
-                avatar: newProfile.avatar_url,
-                verified_at: newProfile.verified_at
-              });
-            }
-          }
+          // Defer Supabase calls with setTimeout to prevent deadlock
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
         } else {
           setUser(null);
+          setIsLoading(false);
         }
-        
-        setIsLoading(false);
       }
     );
 
