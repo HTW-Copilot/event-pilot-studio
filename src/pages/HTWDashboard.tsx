@@ -123,7 +123,7 @@ const HTWDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/10 to-primary/5">
       {/* Enhanced Header with Hawaiian Vibes */}
-      <div className="bg-gradient-tropical text-white">
+      <div className="bg-gradient-to-r from-primary to-blue-500 text-white">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-6">
