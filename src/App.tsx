@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/components/AuthProvider";
 import Header from "./components/Header";
-import LoginPage from "./components/LoginPage";
 import Landing from "./pages/Landing";
 import HTWDashboard from "./pages/HTWDashboard";
 import Wizard from "./pages/Wizard";
@@ -34,22 +33,11 @@ const ProtectedRoute = ({ children, requiredRole }: { children: React.ReactNode;
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
   
-  if (!isAuthenticated) {
-    return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/landing" element={<Landing />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    );
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
         <Routes>
-          <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/" element={<HTWDashboard />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/wizard" element={
