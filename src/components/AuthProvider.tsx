@@ -2,9 +2,10 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 import { AuthState, User, UserRole } from '@/types/auth';
 
 interface AuthContextType extends AuthState {
-  login: (email: string, role: UserRole) => void;
+  login: (email: string, roles: UserRole[]) => void;
   logout: () => void;
-  switchRole: (role: UserRole) => void;
+  switchRole: (roles: UserRole[]) => void;
+  hasRole: (role: UserRole) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,21 +24,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       id: '1',
       email: 'demo@htwweek.org',
       name: 'Demo User',
-      role: 'host',
+      roles: ['event_host'],
       org: 'HTW Demo',
     },
     isAuthenticated: true,
     isLoading: false,
   });
 
-  const login = (email: string, role: UserRole) => {
+  const login = (email: string, roles: UserRole[]) => {
+    const primaryRole = roles[0];
+    const userName = primaryRole === 'htw_staff' ? 'HTW Staff' : 
+                    primaryRole === 'venue_host' ? 'Venue Host' : 'Event Host';
+    const userOrg = primaryRole === 'htw_staff' ? 'HTW Organization' : 'Demo Company';
+
     setAuthState({
       user: {
         id: '1',
         email,
-        name: role === 'organizer' ? 'HTW Organizer' : 'Event Host',
-        role,
-        org: role === 'organizer' ? 'HTW Organization' : 'Demo Company',
+        name: userName,
+        roles,
+        org: userOrg,
       },
       isAuthenticated: true,
       isLoading: false,
@@ -52,22 +58,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const switchRole = (role: UserRole) => {
+  const switchRole = (roles: UserRole[]) => {
     if (authState.user) {
+      const primaryRole = roles[0];
+      const userName = primaryRole === 'htw_staff' ? 'HTW Staff' : 
+                      primaryRole === 'venue_host' ? 'Venue Host' : 'Event Host';
+      const userOrg = primaryRole === 'htw_staff' ? 'HTW Organization' : 'Demo Company';
+
       setAuthState({
         ...authState,
         user: {
           ...authState.user,
-          role,
-          name: role === 'organizer' ? 'HTW Organizer' : 'Event Host',
-          org: role === 'organizer' ? 'HTW Organization' : 'Demo Company',
+          roles,
+          name: userName,
+          org: userOrg,
         },
       });
     }
   };
 
+  const hasRole = (role: UserRole): boolean => {
+    return authState.user?.roles.includes(role) || false;
+  };
+
   return (
-    <AuthContext.Provider value={{ ...authState, login, logout, switchRole }}>
+    <AuthContext.Provider value={{ 
+      ...authState, 
+      login, 
+      logout, 
+      switchRole, 
+      hasRole 
+    }}>
       {children}
     </AuthContext.Provider>
   );
