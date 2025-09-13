@@ -5,14 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight, Lightbulb, FileText, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lightbulb, FileText, Sparkles, Wand2, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { JourneyTracker, type JourneyStep } from "@/components/JourneyTracker";
 import honoluluSkyline from "@/assets/honolulu-skyline.png";
 
 const Wizard = () => {
   const [currentStep, setCurrentStep] = useState("idea");
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
+  const [selectedEventType, setSelectedEventType] = useState("");
+  const [selectedVenue, setSelectedVenue] = useState("");
   const [eventData, setEventData] = useState({
     title: "",
     description: "",
@@ -23,12 +27,57 @@ const Wizard = () => {
     objectives: "",
     requirements: ""
   });
+
+  const availableVenues = [
+    { id: "coworking-hitech", name: "Coworking Hi-Tech - Main Space", capacity: "50-75", type: "Tech Hub" },
+    { id: "coworking-conference", name: "Coworking Hi-Tech - Conference Room", capacity: "15-25", type: "Meeting Room" },
+    { id: "university-hawaii", name: "University of Hawaii - Innovation Center", capacity: "100-150", type: "Academic" },
+    { id: "honolulu-museum", name: "Honolulu Museum of Art - Event Hall", capacity: "75-100", type: "Cultural" },
+    { id: "iolani-palace", name: "Iolani Palace - Reception Hall", capacity: "200+", type: "Historic" },
+    { id: "waikiki-beach", name: "Waikiki Beach - Beachfront Pavilion", capacity: "100-200", type: "Outdoor" },
+    { id: "diamond-head", name: "Diamond Head - Visitor Center", capacity: "30-50", type: "Outdoor" },
+    { id: "pearl-harbor", name: "Pearl Harbor - Memorial Center", capacity: "150-300", type: "Historic" },
+  ];
   
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleInputChange = (field: string, value: string) => {
     setEventData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const generateAIDescription = async () => {
+    if (!eventData.title || !selectedEventType) {
+      toast({
+        title: "Missing Information",
+        description: "Please add an event title and select an event type first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsGeneratingDescription(true);
+    try {
+      // Simulate AI generation
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const aiDescription = `Join us for "${eventData.title}" - an innovative ${selectedEventType.toLowerCase()} designed to bring together Hawaii's tech community. This ${selectedEventType.toLowerCase()} will feature engaging discussions, networking opportunities, and insights into cutting-edge technology trends. Attendees will gain valuable knowledge, make meaningful connections, and contribute to Hawaii's growing tech ecosystem. Whether you're a startup founder, developer, or tech enthusiast, this event promises to inspire and educate while showcasing the unique innovation happening in paradise.`;
+      
+      handleInputChange("description", aiDescription);
+      
+      toast({
+        title: "Description Generated!",
+        description: "AI has created a description based on your event details.",
+      });
+    } catch (error) {
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate description. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingDescription(false);
+    }
   };
 
   const handleNext = () => {
@@ -201,29 +250,47 @@ const Wizard = () => {
                         <div className="space-y-3">
                           <Label className="text-white text-lg font-medium">Event Type</Label>
                           <div className="grid grid-cols-3 gap-3">
-                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
-                              Workshop
-                            </Button>
-                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
-                              Panel
-                            </Button>
-                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
-                              Mixer
-                            </Button>
-                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
-                              Fireside Chat
-                            </Button>
-                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
-                              Conference
-                            </Button>
-                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
-                              Other
-                            </Button>
+                            {["Workshop", "Panel", "Mixer", "Fireside Chat", "Conference", "Other"].map((type) => (
+                              <Button 
+                                key={type}
+                                variant="outline" 
+                                onClick={() => setSelectedEventType(type)}
+                                className={`py-6 text-base transition-all duration-200 ${
+                                  selectedEventType === type 
+                                    ? "bg-yellow text-secondary border-yellow" 
+                                    : "bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow"
+                                }`}
+                              >
+                                {type}
+                              </Button>
+                            ))}
                           </div>
                         </div>
 
                         <div className="space-y-3">
-                          <Label htmlFor="description" className="text-white text-lg font-medium">Initial Description</Label>
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="description" className="text-white text-lg font-medium">Initial Description</Label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={generateAIDescription}
+                              disabled={isGeneratingDescription}
+                              className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow"
+                            >
+                              {isGeneratingDescription ? (
+                                <>
+                                  <Sparkles className="mr-2 h-4 w-4 animate-spin" />
+                                  Generating...
+                                </>
+                              ) : (
+                                <>
+                                  <Wand2 className="mr-2 h-4 w-4" />
+                                  AI Generate
+                                </>
+                              )}
+                            </Button>
+                          </div>
                           <Textarea
                             id="description"
                             placeholder="Describe your event concept, what attendees will gain, key topics..."
@@ -268,6 +335,33 @@ const Wizard = () => {
                             <option value="students" className="bg-secondary text-white">Students & Learners</option>
                             <option value="general" className="bg-secondary text-white">General Tech Community</option>
                           </select>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label className="text-white text-lg font-medium">Preferred Venue</Label>
+                          <Select value={selectedVenue} onValueChange={setSelectedVenue}>
+                            <SelectTrigger className="bg-white/10 border-white/20 text-white text-lg py-6 rounded-xl focus:border-yellow focus:ring-yellow">
+                              <div className="flex items-center gap-2">
+                                <MapPin className="h-5 w-5" />
+                                <SelectValue placeholder="Select a venue in Honolulu" />
+                              </div>
+                            </SelectTrigger>
+                            <SelectContent className="bg-secondary border-white/20">
+                              {availableVenues.map((venue) => (
+                                <SelectItem 
+                                  key={venue.id} 
+                                  value={venue.id}
+                                  className="text-white hover:bg-white/10"
+                                >
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">{venue.name}</span>
+                                    <span className="text-sm text-white/60">{venue.capacity} people • {venue.type}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <p className="text-white/60 text-sm">We'll help coordinate availability and booking</p>
                         </div>
 
                         <div className="space-y-3">

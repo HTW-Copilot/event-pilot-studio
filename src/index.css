@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Modern tech vibes - Blue/Purple with Yellow accents */
+    /* Tropical Paradise - Teal/Blue with Coral/Gold accents */
     --background: 0 0% 100%;
     --foreground: 0 0% 7%;
 
@@ -18,27 +18,27 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 7%;
 
-    /* Primary Blue/Purple */
-    --primary: 248 95% 70%;
+    /* Primary Teal/Turquoise */
+    --primary: 185 84% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 248 95% 85%;
+    --primary-glow: 185 84% 65%;
 
-    /* Dark navy for forms and cards */
-    --secondary: 232 85% 15%;
+    /* Deep ocean blue for forms and cards */
+    --secondary: 215 84% 15%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 248 20% 95%;
-    --accent-foreground: 248 95% 70%;
+    --accent: 185 20% 95%;
+    --accent-foreground: 185 84% 45%;
 
     --destructive: 0 100% 67%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 91%;
     --input: 0 0% 97%;
-    --ring: 248 95% 70%;
+    --ring: 185 84% 45%;
 
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
@@ -46,27 +46,28 @@ All colors MUST be HSL.
     --warning: 35 100% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Yellow accent color */
-    --yellow: 45 100% 65%;
+    /* Coral/Gold accent color */
+    --yellow: 28 100% 65%;
     --yellow-foreground: 0 0% 7%;
 
-    /* Tech gradient colors */
-    --tech-blue: 248 95% 70%;
-    --tech-purple: 270 95% 75%;
-    --tech-navy: 232 85% 15%;
+    /* Paradise gradient colors */
+    --paradise-teal: 185 84% 45%;
+    --paradise-coral: 28 100% 65%;
+    --paradise-pink: 340 75% 70%;
+    --paradise-blue: 215 84% 25%;
 
     --radius: 0.875rem;
 
-    /* Modern tech gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(248 95% 70%), hsl(270 95% 75%));
-    --gradient-hero: linear-gradient(135deg, hsl(248 95% 70%) 0%, hsl(270 95% 75%) 100%);
-    --gradient-dark: linear-gradient(135deg, hsl(232 85% 15%), hsl(240 85% 20%));
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(248 20% 98%));
+    /* Tropical sunset gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(185 84% 45%), hsl(340 75% 70%));
+    --gradient-hero: linear-gradient(135deg, hsl(185 84% 45%) 0%, hsl(28 100% 65%) 50%, hsl(340 75% 70%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(215 84% 15%), hsl(185 84% 20%));
+    --gradient-sunset: linear-gradient(135deg, hsl(185 84% 45%), hsl(28 100% 65%), hsl(340 75% 70%));
 
-    /* Modern shadows */
-    --shadow-elegant: 0 8px 32px -8px hsl(248 95% 70% / 0.15);
+    /* Paradise shadows */
+    --shadow-elegant: 0 8px 32px -8px hsl(185 84% 45% / 0.15);
     --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.08);
-    --shadow-glow: 0 0 40px hsl(248 95% 70% / 0.25);
+    --shadow-glow: 0 0 40px hsl(28 100% 65% / 0.25);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
