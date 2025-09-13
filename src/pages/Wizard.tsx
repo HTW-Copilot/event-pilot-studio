@@ -107,224 +107,292 @@ const Wizard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-teal-50 to-blue-50 relative overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 opacity-20 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${honoluluSkyline})` }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white/80" />
+    <div className="min-h-screen bg-gradient-dark relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3Ccircle cx='60' cy='20' r='3'/%3E%3Ccircle cx='20' cy='60' r='3'/%3E%3Ccircle cx='60' cy='60' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+      </div>
       
       <div className="relative z-10 py-8">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold mb-4 text-foreground">
-                Draft Your Event in <span className="text-primary">Paradise</span>
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                Let's bring your event idea to life with our guided process
-              </p>
+          <div className="max-w-7xl mx-auto">
+            <div className="flex gap-8">
+              {/* Left Sidebar - Progress Steps */}
+              <div className="w-80 flex-shrink-0">
+                <div className="space-y-6">
+                  {/* Event Basics */}
+                  <div className={`p-4 rounded-xl border ${currentStep === "idea" ? 'bg-yellow/10 border-yellow/30' : 'bg-white/5 border-white/10'}`}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === "idea" ? 'bg-yellow text-secondary' : 'bg-white/20 text-white/60'}`}>
+                        📝
+                      </div>
+                      <div>
+                        <div className={`font-semibold ${currentStep === "idea" ? 'text-yellow' : 'text-white/60'}`}>Event Basics</div>
+                        <div className="text-sm text-white/60">Title & Concept</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Details */}
+                  <div className={`p-4 rounded-xl border ${currentStep === "details" ? 'bg-yellow/10 border-yellow/30' : 'bg-white/5 border-white/10'}`}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === "details" ? 'bg-yellow text-secondary' : 'bg-white/20 text-white/60'}`}>
+                        🎯
+                      </div>
+                      <div>
+                        <div className={`font-semibold ${currentStep === "details" ? 'text-yellow' : 'text-white/60'}`}>Details</div>
+                        <div className="text-sm text-white/60">Audience & Format</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Logistics */}
+                  <div className="p-4 rounded-xl border bg-white/5 border-white/10">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/20 text-white/60">
+                        🔧
+                      </div>
+                      <div>
+                        <div className="font-semibold text-white/60">Logistics</div>
+                        <div className="text-sm text-white/60">Venue & Timing</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Review */}
+                  <div className={`p-4 rounded-xl border ${currentStep === "generate" ? 'bg-yellow/10 border-yellow/30' : 'bg-white/5 border-white/10'}`}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === "generate" ? 'bg-yellow text-secondary' : 'bg-white/20 text-white/60'}`}>
+                        ✉️
+                      </div>
+                      <div>
+                        <div className={`font-semibold ${currentStep === "generate" ? 'text-yellow' : 'text-white/60'}`}>Review</div>
+                        <div className="text-sm text-white/60">Final Submission</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Content */}
+              <div className="flex-1">
+                <Tabs value={currentStep} onValueChange={setCurrentStep} className="w-full">
+                  <TabsContent value="idea">
+                    <Card className="bg-secondary/95 border-white/10 shadow-2xl">
+                      <CardHeader className="pb-6">
+                        <CardTitle className="text-3xl font-bold text-yellow mb-2">
+                          What's Your Event Concept?
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-8">
+                        <div className="space-y-3">
+                          <Label htmlFor="title" className="text-white text-lg font-medium">Event Title</Label>
+                          <Input
+                            id="title"
+                            placeholder="e.g., AI in Paradise: Building the Future"
+                            value={eventData.title}
+                            onChange={(e) => handleInputChange("title", e.target.value)}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 text-lg py-6 rounded-xl focus:border-yellow focus:ring-yellow"
+                          />
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label className="text-white text-lg font-medium">Event Type</Label>
+                          <div className="grid grid-cols-3 gap-3">
+                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
+                              Workshop
+                            </Button>
+                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
+                              Panel
+                            </Button>
+                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
+                              Mixer
+                            </Button>
+                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
+                              Fireside Chat
+                            </Button>
+                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
+                              Conference
+                            </Button>
+                            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-yellow hover:text-secondary hover:border-yellow py-6 text-base">
+                              Other
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label htmlFor="description" className="text-white text-lg font-medium">Initial Description</Label>
+                          <Textarea
+                            id="description"
+                            placeholder="Describe your event concept, what attendees will gain, key topics..."
+                            value={eventData.description}
+                            onChange={(e) => handleInputChange("description", e.target.value)}
+                            rows={6}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-xl focus:border-yellow focus:ring-yellow"
+                          />
+                        </div>
+
+                        <div className="flex justify-between pt-6">
+                          <Button variant="ghost" disabled className="text-white/40 text-lg px-8 py-4">
+                            Previous
+                          </Button>
+                          <Button 
+                            onClick={handleNext}
+                            className="bg-yellow text-secondary hover:bg-yellow/90 text-lg px-8 py-4 rounded-xl font-semibold"
+                          >
+                            Next →
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="details">
+                    <Card className="bg-secondary/95 border-white/10 shadow-2xl">
+                      <CardHeader className="pb-6">
+                        <CardTitle className="text-3xl font-bold text-yellow mb-2">
+                          Who Is This For?
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-8">
+                        <div className="space-y-3">
+                          <Label className="text-white text-lg font-medium">Target Audience</Label>
+                          <select className="w-full bg-white/10 border-white/20 text-white text-lg py-6 px-4 rounded-xl focus:border-yellow focus:ring-yellow">
+                            <option value="" className="bg-secondary text-white">Select your target audience</option>
+                            <option value="founders" className="bg-secondary text-white">Startup Founders</option>
+                            <option value="developers" className="bg-secondary text-white">Developers & Engineers</option>
+                            <option value="designers" className="bg-secondary text-white">Designers & Creatives</option>
+                            <option value="investors" className="bg-secondary text-white">Investors & VCs</option>
+                            <option value="students" className="bg-secondary text-white">Students & Learners</option>
+                            <option value="general" className="bg-secondary text-white">General Tech Community</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label htmlFor="cohosts" className="text-white text-lg font-medium">Potential Co-Hosts or Partners</Label>
+                          <Input
+                            id="cohosts"
+                            placeholder="e.g., Hawaii Angels, Purple Mai'a"
+                            value={eventData.venue}
+                            onChange={(e) => handleInputChange("venue", e.target.value)}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 text-lg py-6 rounded-xl focus:border-yellow focus:ring-yellow"
+                          />
+                          <p className="text-white/60 text-sm">Optional - we can help connect you</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-3">
+                            <Label htmlFor="date" className="text-white text-lg font-medium">Preferred Date</Label>
+                            <Input
+                              id="date"
+                              type="date"
+                              value={eventData.date}
+                              onChange={(e) => handleInputChange("date", e.target.value)}
+                              className="bg-white/10 border-white/20 text-white text-lg py-6 rounded-xl focus:border-yellow focus:ring-yellow"
+                            />
+                          </div>
+                          <div className="space-y-3">
+                            <Label htmlFor="attendees" className="text-white text-lg font-medium">Expected Attendees</Label>
+                            <Input
+                              id="attendees"
+                              placeholder="e.g., 50-100 people"
+                              value={eventData.attendees}
+                              onChange={(e) => handleInputChange("attendees", e.target.value)}
+                              className="bg-white/10 border-white/20 text-white placeholder:text-white/50 text-lg py-6 rounded-xl focus:border-yellow focus:ring-yellow"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex justify-between pt-6">
+                          <Button 
+                            variant="ghost" 
+                            onClick={() => setCurrentStep("idea")}
+                            className="text-white/60 hover:text-white text-lg px-8 py-4"
+                          >
+                            ← Previous
+                          </Button>
+                          <Button 
+                            onClick={handleNext}
+                            className="bg-yellow text-secondary hover:bg-yellow/90 text-lg px-8 py-4 rounded-xl font-semibold"
+                          >
+                            Next →
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="generate">
+                    <Card className="bg-secondary/95 border-white/10 shadow-2xl">
+                      <CardHeader className="pb-6">
+                        <CardTitle className="text-3xl font-bold text-yellow mb-2">
+                          Review & Submit
+                        </CardTitle>
+                        <CardDescription className="text-white/70 text-lg">
+                          Review your event details and submit for approval
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-8">
+                        <div className="bg-white/5 p-8 rounded-xl border border-white/10">
+                          <h3 className="font-semibold mb-6 text-white text-xl">Event Summary</h3>
+                          <div className="space-y-4 text-white/90">
+                            <div>
+                              <span className="font-medium text-yellow">Title:</span> 
+                              <span className="ml-2">{eventData.title || "Not specified"}</span>
+                            </div>
+                            <div>
+                              <span className="font-medium text-yellow">Description:</span> 
+                              <span className="ml-2">{eventData.description || "Not specified"}</span>
+                            </div>
+                            {eventData.venue && (
+                              <div>
+                                <span className="font-medium text-yellow">Co-hosts:</span> 
+                                <span className="ml-2">{eventData.venue}</span>
+                              </div>
+                            )}
+                            {eventData.date && (
+                              <div>
+                                <span className="font-medium text-yellow">Date:</span> 
+                                <span className="ml-2">{eventData.date}</span>
+                              </div>
+                            )}
+                            {eventData.attendees && (
+                              <div>
+                                <span className="font-medium text-yellow">Attendees:</span> 
+                                <span className="ml-2">{eventData.attendees}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="text-center pt-4">
+                          <Button
+                            size="lg"
+                            onClick={handleGeneratePlan}
+                            className="bg-yellow text-secondary hover:bg-yellow/90 text-xl px-12 py-6 rounded-xl font-semibold shadow-2xl hover:shadow-glow transition-all duration-300"
+                          >
+                            <Sparkles className="mr-3 h-6 w-6" />
+                            Submit for Review
+                          </Button>
+                        </div>
+
+                        <div className="flex justify-between pt-6">
+                          <Button 
+                            variant="ghost" 
+                            onClick={() => setCurrentStep("details")}
+                            className="text-white/60 hover:text-white text-lg px-8 py-4"
+                          >
+                            ← Previous
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
-
-            {/* Journey Tracker */}
-            <div className="mb-8">
-              <JourneyTracker 
-                steps={journeySteps}
-                currentStep={getCurrentStepNumber()}
-                totalSteps={5}
-              />
-            </div>
-
-          <Tabs value={currentStep} onValueChange={setCurrentStep} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
-              {steps.map((step) => {
-                const Icon = step.icon;
-                return (
-                  <TabsTrigger 
-                    key={step.id} 
-                    value={step.id}
-                    disabled={currentStep === "idea" && step.id !== "idea"}
-                    className="flex items-center gap-2"
-                  >
-                    <Icon className="h-4 w-4" />
-                    {step.title}
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-
-            <TabsContent value="idea">
-              <Card className="shadow-card border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-primary" />
-                    Tell us about your event idea
-                  </CardTitle>
-                  <CardDescription>
-                    Start with the basics - what's your vision?
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="title">Event Title *</Label>
-                    <Input
-                      id="title"
-                      placeholder="e.g., HTW Tech Conference 2024"
-                      value={eventData.title}
-                      onChange={(e) => handleInputChange("title", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Event Description *</Label>
-                    <Textarea
-                      id="description"
-                      placeholder="Describe your event, its purpose, and what makes it special..."
-                      value={eventData.description}
-                      onChange={(e) => handleInputChange("description", e.target.value)}
-                      rows={4}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="objectives">Key Objectives</Label>
-                    <Textarea
-                      id="objectives"
-                      placeholder="What do you hope to achieve with this event?"
-                      value={eventData.objectives}
-                      onChange={(e) => handleInputChange("objectives", e.target.value)}
-                      rows={3}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="details">
-              <Card className="shadow-card border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-primary" />
-                    Event Details
-                  </CardTitle>
-                  <CardDescription>
-                    Let's get into the specifics of your event
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="venue">Venue</Label>
-                      <Input
-                        id="venue"
-                        placeholder="Event location"
-                        value={eventData.venue}
-                        onChange={(e) => handleInputChange("venue", e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="date">Preferred Date</Label>
-                      <Input
-                        id="date"
-                        type="date"
-                        value={eventData.date}
-                        onChange={(e) => handleInputChange("date", e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="budget">Budget Range</Label>
-                      <Input
-                        id="budget"
-                        placeholder="e.g., $5,000 - $10,000"
-                        value={eventData.budget}
-                        onChange={(e) => handleInputChange("budget", e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="attendees">Expected Attendees</Label>
-                      <Input
-                        id="attendees"
-                        placeholder="e.g., 100-200 people"
-                        value={eventData.attendees}
-                        onChange={(e) => handleInputChange("attendees", e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="requirements">Special Requirements</Label>
-                    <Textarea
-                      id="requirements"
-                      placeholder="Any special needs, equipment, catering preferences, etc."
-                      value={eventData.requirements}
-                      onChange={(e) => handleInputChange("requirements", e.target.value)}
-                      rows={3}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="generate">
-              <Card className="shadow-card border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                    Generate Your Event Plan
-                  </CardTitle>
-                  <CardDescription>
-                    Review your details and generate a comprehensive event plan
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="bg-accent/50 p-6 rounded-lg">
-                    <h3 className="font-semibold mb-4">Event Summary</h3>
-                    <div className="space-y-2 text-sm">
-                      <p><span className="font-medium">Title:</span> {eventData.title}</p>
-                      <p><span className="font-medium">Description:</span> {eventData.description}</p>
-                      {eventData.venue && <p><span className="font-medium">Venue:</span> {eventData.venue}</p>}
-                      {eventData.date && <p><span className="font-medium">Date:</span> {eventData.date}</p>}
-                      {eventData.budget && <p><span className="font-medium">Budget:</span> {eventData.budget}</p>}
-                      {eventData.attendees && <p><span className="font-medium">Attendees:</span> {eventData.attendees}</p>}
-                    </div>
-                  </div>
-                  
-                  <div className="text-center">
-                    <Button
-                      size="lg"
-                      onClick={handleGeneratePlan}
-                      className="px-8 shadow-elegant hover:shadow-glow transition-all duration-300"
-                    >
-                      <Sparkles className="mr-2 h-5 w-5" />
-                      Generate Event Plan
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-
-          {/* Navigation */}
-          <div className="flex justify-between mt-8">
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (currentStep === "details") setCurrentStep("idea");
-                else if (currentStep === "generate") setCurrentStep("details");
-              }}
-              disabled={currentStep === "idea"}
-            >
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Previous
-            </Button>
-            
-            {currentStep !== "generate" && (
-              <Button onClick={handleNext}>
-                Next
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            )}
-          </div>
           </div>
         </div>
       </div>

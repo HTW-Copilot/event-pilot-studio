@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Hawaiian tropical palette with Apple refinement */
+    /* Modern tech vibes - Blue/Purple with Yellow accents */
     --background: 0 0% 100%;
     --foreground: 0 0% 7%;
 
@@ -18,27 +18,27 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 7%;
 
-    /* Hawaiian ocean to tropical green gradient */
-    --primary: 174 72% 56%;
+    /* Primary Blue/Purple */
+    --primary: 248 95% 70%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 174 72% 76%;
+    --primary-glow: 248 95% 85%;
 
-    /* Refined warm grays */
-    --secondary: 0 0% 97%;
-    --secondary-foreground: 0 0% 15%;
+    /* Dark navy for forms and cards */
+    --secondary: 232 85% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 97%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 174 20% 95%;
-    --accent-foreground: 174 72% 56%;
+    --accent: 248 20% 95%;
+    --accent-foreground: 248 95% 70%;
 
     --destructive: 0 100% 67%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 91%;
     --input: 0 0% 97%;
-    --ring: 174 72% 56%;
+    --ring: 248 95% 70%;
 
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
@@ -46,26 +46,27 @@ All colors MUST be HSL.
     --warning: 35 100% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Hawaiian sunset accent */
-    --sunset: 25 100% 60%;
-    --sunset-foreground: 0 0% 100%;
+    /* Yellow accent color */
+    --yellow: 45 100% 65%;
+    --yellow-foreground: 0 0% 7%;
 
-    /* Tropical ocean blue */
-    --ocean: 200 100% 45%;
-    --ocean-foreground: 0 0% 100%;
+    /* Tech gradient colors */
+    --tech-blue: 248 95% 70%;
+    --tech-purple: 270 95% 75%;
+    --tech-navy: 232 85% 15%;
 
     --radius: 0.875rem;
 
-    /* Hawaiian-inspired gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(174 72% 56%), hsl(168 72% 66%));
-    --gradient-tropical: linear-gradient(135deg, hsl(174 72% 56%), hsl(200 100% 45%));
-    --gradient-sunset: linear-gradient(135deg, hsl(25 100% 60%), hsl(35 100% 65%));
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(174 20% 98%));
+    /* Modern tech gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(248 95% 70%), hsl(270 95% 75%));
+    --gradient-hero: linear-gradient(135deg, hsl(248 95% 70%) 0%, hsl(270 95% 75%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(232 85% 15%), hsl(240 85% 20%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(248 20% 98%));
 
-    /* Refined Apple-style shadows with tropical tint */
-    --shadow-elegant: 0 8px 32px -8px hsl(174 72% 56% / 0.12);
-    --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.06);
-    --shadow-glow: 0 0 40px hsl(174 72% 56% / 0.2);
+    /* Modern shadows */
+    --shadow-elegant: 0 8px 32px -8px hsl(248 95% 70% / 0.15);
+    --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.08);
+    --shadow-glow: 0 0 40px hsl(248 95% 70% / 0.25);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

@@ -123,42 +123,41 @@ const HTWDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/10 to-primary/5">
-      {/* Enhanced Header with Hawaiian Vibes - Similar to Reference */}
-      <div className="relative bg-gradient-to-br from-sky-400 via-teal-500 to-blue-600 text-white overflow-hidden">
+      {/* Modern Tech Hero - Matching Reference Design */}
+      <div className="relative bg-gradient-hero text-white overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3Ccircle cx='60' cy='20' r='3'/%3E%3Ccircle cx='20' cy='60' r='3'/%3E%3Ccircle cx='60' cy='60' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
           }}></div>
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-6 py-20">
-          {/* Logo and Title Section */}
-          <div className="flex items-center gap-6 mb-8">
-            <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl p-3 flex items-center justify-center">
-              <img src={htwLogoLong} alt="HTW Logo" className="w-full h-full object-contain filter brightness-0 invert" />
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold">Honolulu Tech Week 2025</h2>
-              <p className="text-white/80 text-lg">Host Portal</p>
+        <div className="relative max-w-7xl mx-auto px-6 py-24">
+          {/* Welcome Message */}
+          <div className="text-left mb-12">
+            <div className="inline-flex items-center gap-2 mb-4">
+              <Sparkles className="h-5 w-5 text-yellow" />
+              <span className="text-white/90 font-medium">Welcome back!</span>
             </div>
           </div>
 
           {/* Main Hero Content */}
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              Create Your Perfect Event in <span className="text-yellow-300">Paradise</span>
+          <div className="max-w-5xl">
+            <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+              Ready to make HTW 2025
+              <br />
+              <span className="text-yellow">Unforgettable?</span>
             </h1>
             
-            <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Join Hawaii's premier tech gathering where innovation meets aloha spirit. 
-              Our guided process helps you create meaningful connections in the most beautiful setting on Earth.
+            <p className="text-2xl text-white/90 max-w-4xl mb-12 leading-relaxed">
+              Join the premier tech community event in Hawaii. Connect with innovators, 
+              share your expertise, and help shape the future of island tech.
             </p>
             
-            <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-8">
-              <Calendar className="h-4 w-4" />
-              October 14-18, 2025 • Honolulu, Hawaii
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/15 backdrop-blur-sm rounded-full text-lg font-medium mb-12">
+              <Calendar className="h-5 w-5" />
+              September 8-14, 2025 • Honolulu, Hawaii
             </div>
 
             {/* Role-based Navigation */}
@@ -174,35 +173,26 @@ const HTWDashboard = () => {
             </div>
 
             {userRole === "submitter" && (
-              <div className="flex justify-center gap-3">
+              <div className="flex gap-6">
                 <Link to="/wizard">
-                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                    <Sparkles className="mr-2 h-5 w-5" />
-                    Start Your Event
+                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-4 rounded-2xl font-semibold">
+                    <span className="text-blue-600 mr-3 text-xl">⊕</span>
+                    Create Your Event
                   </Button>
                 </Link>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="border-white/30 text-white hover:bg-white/10"
-                  onClick={() => window.open("https://docs.google.com/document/d/1zbvleFX0UXH1xKMa_tGzeei-lGx_QCGUsMcbzHWl5Vk/edit?tab=t.0", "_blank")}
-                >
-                  <FileText className="mr-2 h-5 w-5" />
-                  View Guide
-                </Button>
               </div>
             )}
 
             {userRole === "judge" && (
-              <div className="flex justify-center gap-3">
+              <div className="flex gap-6">
                 <Link to="/review">
-                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                    <BarChart3 className="mr-2 h-5 w-5" />
+                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-xl text-lg px-8 py-4 rounded-2xl font-semibold">
+                    <BarChart3 className="mr-3 h-5 w-5" />
                     Review Submissions
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
-                  <Settings className="mr-2 h-5 w-5" />
+                <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/15 text-lg px-8 py-4 rounded-2xl">
+                  <Settings className="mr-3 h-5 w-5" />
                   Admin Panel
                 </Button>
               </div>
