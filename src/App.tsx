@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/components/AuthProvider";
 import Header from "./components/Header";
 import Landing from "./pages/Landing";
+import Auth from "./pages/Auth";
 import HTWDashboard from "./pages/HTWDashboard";
 import Wizard from "./pages/Wizard";
 import Review from "./pages/Review";
@@ -20,7 +21,7 @@ const ProtectedRoute = ({ children, requiredRole }: { children: React.ReactNode;
   const { isAuthenticated, hasRole } = useAuth();
   
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth" replace />;
   }
   
   if (requiredRole && !hasRole(requiredRole as any)) {
@@ -38,6 +39,7 @@ const AppRoutes = () => {
       <Header />
       <main className="flex-1">
         <Routes>
+          <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<HTWDashboard />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/wizard" element={

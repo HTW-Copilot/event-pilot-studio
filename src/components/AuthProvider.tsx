@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           // Create user profile if it doesn't exist 
           // Assign htw_staff role for admin email, event_host for others
-          const isAdmin = session?.user?.email === 'admin@htwweek.org';
+          const isAdmin = session?.user?.email === 'admin@test.com';
           const roles: UserRole[] = isAdmin ? ['htw_staff'] : ['event_host'];
           
           const { data: newProfile } = await supabase
