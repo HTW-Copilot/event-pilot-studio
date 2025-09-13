@@ -4,6 +4,7 @@ import { Sparkles, Users, Calendar, BarChart3, Plus, CheckCircle, Clock, AlertCi
 import { Link } from "react-router-dom";
 import htwLogoLong from "@/assets/htw-logo-long.svg";
 import honoluluSkyline from "@/assets/honolulu-skyline.png";
+import honoluluSkylineSunset from "@/assets/honolulu-skyline-sunset.png";
 
 const HTWDashboard = () => {
   const mockEvents = [
@@ -47,9 +48,27 @@ const HTWDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-accent/30">
-      {/* Hero Section */}
-      <section className="relative py-20 px-6 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background to-accent/30 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 animate-slide-in-right" 
+             style={{
+               backgroundImage: `url(${honoluluSkylineSunset})`,
+               backgroundSize: 'cover',
+               backgroundPosition: 'center',
+               backgroundRepeat: 'no-repeat',
+               animation: 'slide-left-to-right 20s linear infinite',
+               width: '120%',
+               height: '100%'
+             }}>
+        </div>
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-sm"></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Hero Section */}
+        <section className="relative py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-subtle backdrop-blur-sm"></div>
         <div className="relative max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -174,6 +193,7 @@ const HTWDashboard = () => {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 };
