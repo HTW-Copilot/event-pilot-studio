@@ -76,38 +76,26 @@ const SignInDialog = ({ children }: SignInDialogProps) => {
     setIsLoading(false);
   };
 
-  const handleTestAdmin = async () => {
+  const handleCreateTestAdmin = async () => {
     setIsLoading(true);
     
-    // First try to sign up the admin user
+    // First create the auth user
     const { error: signUpError } = await signUp('admin@htwweek.org', 'htwadmin2025', 'HTW Admin');
     
-    if (signUpError && signUpError.message !== 'User already registered') {
+    if (signUpError && !signUpError.message.includes('already registered')) {
       toast({
-        title: "Setup Failed",
+        title: "Failed to Create Test Admin",
         description: signUpError.message,
         variant: "destructive",
       });
       setIsLoading(false);
       return;
     }
-    
-    // Then try to sign in
-    const { error } = await signIn('admin@htwweek.org', 'htwadmin2025');
-    
-    if (error) {
-      toast({
-        title: "Test Admin Login Failed",
-        description: "Try creating a new account first, then sign in.",
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Welcome, HTW Staff!",
-        description: "You've been signed in as an administrator.",
-      });
-      setIsOpen(false);
-    }
+
+    toast({
+      title: "Test Admin Account Created",
+      description: "Check your email to verify, then you can sign in with admin@htwweek.org / htwadmin2025",
+    });
     
     setIsLoading(false);
   };
@@ -213,18 +201,21 @@ const SignInDialog = ({ children }: SignInDialogProps) => {
           </TabsContent>
         </Tabs>
         
-        <div className="border-t pt-4">
+        <div className="border-t pt-4 space-y-2">
           <Button 
             variant="outline" 
-            onClick={handleTestAdmin}
+            onClick={handleCreateTestAdmin}
             disabled={isLoading}
             className="w-full text-xs"
           >
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
-            Create HTW Admin & Sign In
+            Create Test HTW Staff Account
           </Button>
+          <div className="text-xs text-center text-muted-foreground">
+            Creates: admin@htwweek.org / htwadmin2025
+          </div>
         </div>
       </DialogContent>
     </Dialog>
