@@ -67,14 +67,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             verified_at: profile.verified_at
           });
         } else {
-          // Create user profile if it doesn't exist (event_host by default)
+          // Create user profile if it doesn't exist 
+          // Assign htw_staff role for admin email, event_host for others
+          const isAdmin = session?.user?.email === 'admin@htwweek.org';
+          const roles: UserRole[] = isAdmin ? ['htw_staff'] : ['event_host'];
+          
           const { data: newProfile } = await supabase
             .from('users')
             .insert({
-              id: userId,
               email: session?.user?.email!,
               name: session?.user?.user_metadata?.name || session?.user?.email!.split('@')[0],
-              roles: ['event_host']
+              roles: roles
             })
             .select()
             .single();

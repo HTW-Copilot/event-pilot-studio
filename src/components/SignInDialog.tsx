@@ -79,12 +79,26 @@ const SignInDialog = ({ children }: SignInDialogProps) => {
   const handleTestAdmin = async () => {
     setIsLoading(true);
     
+    // First try to sign up the admin user
+    const { error: signUpError } = await signUp('admin@htwweek.org', 'htwadmin2025', 'HTW Admin');
+    
+    if (signUpError && signUpError.message !== 'User already registered') {
+      toast({
+        title: "Setup Failed",
+        description: signUpError.message,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+    
+    // Then try to sign in
     const { error } = await signIn('admin@htwweek.org', 'htwadmin2025');
     
     if (error) {
       toast({
         title: "Test Admin Login Failed",
-        description: error.message,
+        description: "Try creating a new account first, then sign in.",
         variant: "destructive",
       });
     } else {
@@ -209,7 +223,7 @@ const SignInDialog = ({ children }: SignInDialogProps) => {
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
-            Test HTW Staff Login
+            Create HTW Admin & Sign In
           </Button>
         </div>
       </DialogContent>
