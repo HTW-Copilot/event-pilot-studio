@@ -14,7 +14,106 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          ai_output: Json | null
+          created_at: string | null
+          host_id: string | null
+          id: string
+          idea_text: string | null
+          status: string | null
+        }
+        Insert: {
+          ai_output?: Json | null
+          created_at?: string | null
+          host_id?: string | null
+          id?: string
+          idea_text?: string | null
+          status?: string | null
+        }
+        Update: {
+          ai_output?: Json | null
+          created_at?: string | null
+          host_id?: string | null
+          id?: string
+          idea_text?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "hosts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hosts: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          name: string | null
+          org: string | null
+          state: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          name?: string | null
+          org?: string | null
+          state?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          name?: string | null
+          org?: string | null
+          state?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comments: string | null
+          created_at: string | null
+          event_id: string | null
+          id: string
+          status: string | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
