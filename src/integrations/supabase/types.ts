@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      actions_log: {
+        Row: {
+          action: string
+          actor: string
+          created_at: string
+          event_id: string | null
+          id: string
+          payload: Json | null
+        }
+        Insert: {
+          action: string
+          actor: string
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          payload?: Json | null
+        }
+        Update: {
+          action?: string
+          actor?: string
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          payload?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "actions_log_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           ai_output: Json | null
@@ -22,6 +57,7 @@ export type Database = {
           id: string
           idea_text: string | null
           status: string | null
+          updated_at: string | null
         }
         Insert: {
           ai_output?: Json | null
@@ -30,6 +66,7 @@ export type Database = {
           id?: string
           idea_text?: string | null
           status?: string | null
+          updated_at?: string | null
         }
         Update: {
           ai_output?: Json | null
@@ -38,6 +75,7 @@ export type Database = {
           id?: string
           idea_text?: string | null
           status?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -51,34 +89,97 @@ export type Database = {
       }
       hosts: {
         Row: {
+          bio: string | null
           city: string | null
           country: string | null
           created_at: string | null
           email: string | null
           id: string
+          linkedin_url: string | null
           name: string | null
           org: string | null
+          phone: string | null
           state: string | null
+          updated_at: string | null
         }
         Insert: {
+          bio?: string | null
           city?: string | null
           country?: string | null
           created_at?: string | null
           email?: string | null
           id?: string
+          linkedin_url?: string | null
           name?: string | null
           org?: string | null
+          phone?: string | null
           state?: string | null
+          updated_at?: string | null
         }
         Update: {
+          bio?: string | null
           city?: string | null
           country?: string | null
           created_at?: string | null
           email?: string | null
           id?: string
+          linkedin_url?: string | null
           name?: string | null
           org?: string | null
+          phone?: string | null
           state?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      kb_chunks: {
+        Row: {
+          content: string
+          created_at: string
+          heading: string
+          id: string
+          source: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          heading: string
+          id?: string
+          source: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          heading?: string
+          id?: string
+          source?: string
+        }
+        Relationships: []
+      }
+      prompt_templates: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          key: string
+          title: string
+          variables: Json | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          key: string
+          title: string
+          variables?: Json | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          key?: string
+          title?: string
+          variables?: Json | null
         }
         Relationships: []
       }
@@ -89,6 +190,7 @@ export type Database = {
           event_id: string | null
           id: string
           status: string | null
+          updated_at: string | null
         }
         Insert: {
           comments?: string | null
@@ -96,6 +198,7 @@ export type Database = {
           event_id?: string | null
           id?: string
           status?: string | null
+          updated_at?: string | null
         }
         Update: {
           comments?: string | null
@@ -103,6 +206,7 @@ export type Database = {
           event_id?: string | null
           id?: string
           status?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
