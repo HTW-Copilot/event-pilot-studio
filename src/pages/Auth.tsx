@@ -23,7 +23,7 @@ const Auth = () => {
   const [signUpPassword, setSignUpPassword] = useState('');
   const [signUpName, setSignUpName] = useState('');
   
-  const { signIn, signUp, isAuthenticated } = useAuth();
+  const { signIn, signUp, isAuthenticated, hasRole } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -51,7 +51,10 @@ const Auth = () => {
         title: "Welcome back!",
         description: "You've been signed in successfully.",
       });
-      navigate('/');
+      // Wait briefly for auth state to update, then redirect based on role
+      setTimeout(() => {
+        redirectToRoleDashboard();
+      }, 100);
     }
     
     setIsLoading(false);
@@ -106,6 +109,18 @@ const Auth = () => {
     setIsLoading(false);
   };
 
+  const redirectToRoleDashboard = () => {
+    if (isAuthenticated) {
+      if (hasRole('htw_staff')) {
+        navigate('/organizer');
+      } else if (hasRole('event_host')) {
+        navigate('/');
+      } else {
+        navigate('/');
+      }
+    }
+  };
+
   const handleQuickSignIn = async (email: string, password: string, role: string) => {
     setIsLoading(true);
     
@@ -132,7 +147,10 @@ const Auth = () => {
         title: `Welcome, ${role}!`,
         description: "You've been signed in successfully.",
       });
-      navigate('/');
+      // Wait briefly for auth state to update, then redirect based on role
+      setTimeout(() => {
+        redirectToRoleDashboard();
+      }, 100);
     }
     
     setIsLoading(false);
