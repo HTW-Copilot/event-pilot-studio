@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, CheckSquare } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import htwLogoShort from "@/assets/htw-logo-short.svg";
 
 const Header = () => {
   const location = useLocation();
@@ -9,12 +10,11 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/70">
       <div className="container flex h-16 items-center justify-between px-6">
         <Link to="/" className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-white" />
+          <img src={htwLogoShort} alt="HTW Logo" className="h-8 w-auto" />
+          <div className="flex flex-col">
+            <span className="text-lg font-bold text-foreground">Honolulu Tech Week</span>
+            <span className="text-sm text-muted-foreground">Host Portal</span>
           </div>
-          <span className="text-xl font-semibold text-foreground">
-            HTW Host Portal
-          </span>
         </Link>
         
         <nav className="flex items-center space-x-2">
