@@ -110,19 +110,25 @@ const Auth = () => {
   };
 
   const redirectToRoleDashboard = () => {
+    console.log('redirectToRoleDashboard called', { isAuthenticated, user });
+    
     if (isAuthenticated && user && user.roles && user.roles.length > 0) {
+      console.log('User has roles, redirecting based on role');
       if (hasRole('htw_staff')) {
+        console.log('Redirecting HTW staff to /organizer');
         navigate('/organizer');
-      } else if (hasRole('event_host')) {
-        navigate('/');
       } else {
+        console.log('Redirecting event host to /');
         navigate('/');
       }
-    } else if (isAuthenticated) {
+    } else if (isAuthenticated && !user) {
+      console.log('User is authenticated but profile not loaded yet, waiting...');
       // Wait a bit longer for the user profile to load with roles
       setTimeout(() => {
         redirectToRoleDashboard();
       }, 500);
+    } else {
+      console.log('User not authenticated or no roles');
     }
   };
 

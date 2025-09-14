@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           .from('users')
           .select('*')
           .eq('id', userId)
-          .single();
+          .maybeSingle();
         
         console.log('Profile fetch result:', { profile, error });
         
@@ -85,13 +85,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const { data: newProfile, error: insertError } = await supabase
             .from('users')
             .insert({
-              id: userId, // Make sure to set the ID
+              id: userId,
               email: session?.user?.email!,
               name: session?.user?.user_metadata?.name || session?.user?.email!.split('@')[0],
               roles: roles
             })
             .select()
-            .single();
+            .maybeSingle();
           
           console.log('New profile creation result:', { newProfile, insertError });
           
