@@ -8,7 +8,6 @@ import Header from "./components/Header";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import HTWDashboard from "./pages/HTWDashboard";
-import EventHostDashboard from "./pages/EventHostDashboard";
 import Wizard from "./pages/Wizard";
 import Review from "./pages/Review";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
@@ -43,11 +42,6 @@ const AppRoutes = () => {
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<HTWDashboard />} />
           <Route path="/landing" element={<Landing />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute requiredRole="event_host">
-              <EventHostDashboard />
-            </ProtectedRoute>
-          } />
           <Route path="/wizard" element={
             <ProtectedRoute requiredRole="event_host">
               <Wizard />
