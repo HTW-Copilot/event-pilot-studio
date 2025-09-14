@@ -23,16 +23,16 @@ const Auth = () => {
   const [signUpPassword, setSignUpPassword] = useState('');
   const [signUpName, setSignUpName] = useState('');
   
-  const { signIn, signUp, isAuthenticated, hasRole } = useAuth();
+  const { signIn, signUp, isAuthenticated, hasRole, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated and user profile is loaded
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
+    if (isAuthenticated && user && user.roles && user.roles.length > 0) {
+      redirectToRoleDashboard();
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,10 +51,10 @@ const Auth = () => {
         title: "Welcome back!",
         description: "You've been signed in successfully.",
       });
-      // Wait briefly for auth state to update, then redirect based on role
+      // Wait for auth state to update, then redirect based on role
       setTimeout(() => {
         redirectToRoleDashboard();
-      }, 100);
+      }, 1000);
     }
     
     setIsLoading(false);
@@ -110,7 +110,7 @@ const Auth = () => {
   };
 
   const redirectToRoleDashboard = () => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user && user.roles && user.roles.length > 0) {
       if (hasRole('htw_staff')) {
         navigate('/organizer');
       } else if (hasRole('event_host')) {
@@ -118,6 +118,11 @@ const Auth = () => {
       } else {
         navigate('/');
       }
+    } else if (isAuthenticated) {
+      // Wait a bit longer for the user profile to load with roles
+      setTimeout(() => {
+        redirectToRoleDashboard();
+      }, 500);
     }
   };
 
@@ -147,10 +152,10 @@ const Auth = () => {
         title: `Welcome, ${role}!`,
         description: "You've been signed in successfully.",
       });
-      // Wait briefly for auth state to update, then redirect based on role
+      // Wait for auth state to update, then redirect based on role
       setTimeout(() => {
         redirectToRoleDashboard();
-      }, 100);
+      }, 1000);
     }
     
     setIsLoading(false);

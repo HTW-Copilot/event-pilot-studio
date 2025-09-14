@@ -75,6 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const { data: newProfile } = await supabase
             .from('users')
             .insert({
+              id: userId, // Make sure to set the ID
               email: session?.user?.email!,
               name: session?.user?.user_metadata?.name || session?.user?.email!.split('@')[0],
               roles: roles
