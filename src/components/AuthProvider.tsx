@@ -47,14 +47,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUserProfile = async (userId: string) => {
       try {
+        console.log('Fetching user profile for:', userId);
+        
         // Fetch user profile from our users table
-        const { data: profile } = await supabase
+        const { data: profile, error } = await supabase
           .from('users')
           .select('*')
           .eq('id', userId)
           .single();
         
+        console.log('Profile fetch result:', { profile, error });
+        
+        if (error) {
+          console.error('Error fetching profile:', error);
+        }
+        
         if (profile) {
+          console.log('Setting user profile:', profile);
           setUser({
             id: profile.id,
             email: profile.email,
@@ -67,12 +76,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             verified_at: profile.verified_at
           });
         } else {
+          console.log('No profile found, creating new one');
           // Create user profile if it doesn't exist 
           // Assign htw_staff role for admin email, event_host for others
           const isAdmin = session?.user?.email === 'admin@test.com';
           const roles: UserRole[] = isAdmin ? ['htw_staff'] : ['event_host'];
           
-          const { data: newProfile } = await supabase
+          const { data: newProfile, error: insertError } = await supabase
             .from('users')
             .insert({
               id: userId, // Make sure to set the ID
@@ -82,6 +92,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             })
             .select()
             .single();
+          
+          console.log('New profile creation result:', { newProfile, insertError });
           
           if (newProfile) {
             setUser({
