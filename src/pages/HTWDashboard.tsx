@@ -7,10 +7,19 @@ import { Users, Calendar, BarChart3, LogIn } from "lucide-react";
 import honoluluSkylineSunset from "@/assets/honolulu-skyline-sunset.png";
 
 const HTWDashboard = () => {
-  const { isAuthenticated, hasRole } = useAuth();
+  const { isAuthenticated, hasRole, user } = useAuth();
+
+  console.log('HTWDashboard render:', { 
+    isAuthenticated, 
+    userRoles: user?.roles, 
+    hasEventHost: hasRole('event_host'),
+    hasHtwStaff: hasRole('htw_staff'),
+    user 
+  });
 
   // If user is authenticated and is an event host, show their dashboard
   if (isAuthenticated && hasRole('event_host')) {
+    console.log('Rendering EventHostDashboard');
     return <EventHostDashboard />;
   }
 
