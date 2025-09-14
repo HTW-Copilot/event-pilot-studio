@@ -118,8 +118,8 @@ const Auth = () => {
         console.log('Redirecting HTW staff to /organizer');
         navigate('/organizer');
       } else {
-        console.log('Redirecting event host to /');
-        navigate('/');
+        console.log('Redirecting event host to /dashboard');
+        navigate('/dashboard');
       }
     } else if (isAuthenticated && !user) {
       console.log('User is authenticated but profile not loaded yet, waiting...');

@@ -17,13 +17,7 @@ const HTWDashboard = () => {
     user 
   });
 
-  // If user is authenticated and is an event host, show their dashboard
-  if (isAuthenticated && hasRole('event_host')) {
-    console.log('Rendering EventHostDashboard');
-    return <EventHostDashboard />;
-  }
-
-  // If user is authenticated but HTW staff, redirect them or show appropriate content
+  // If user is authenticated and is HTW staff, show staff redirect message
   if (isAuthenticated && hasRole('htw_staff')) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-accent/30 relative overflow-hidden">

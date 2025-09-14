@@ -23,15 +23,29 @@ const Header = () => {
         <nav className="flex items-center space-x-2">
           {isAuthenticated ? (
             <>
-              <Link to="/">
-                <Button 
-                  variant={location.pathname === "/" ? "default" : "ghost"}
-                  size="sm"
-                  className="font-medium"
-                >
-                  Dashboard
-                </Button>
-              </Link>
+              {hasRole('event_host') && (
+                <Link to="/dashboard">
+                  <Button 
+                    variant={location.pathname === "/dashboard" ? "default" : "ghost"}
+                    size="sm"
+                    className="font-medium"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              )}
+
+              {hasRole('htw_staff') && (
+                <Link to="/">
+                  <Button 
+                    variant={location.pathname === "/" ? "default" : "ghost"}
+                    size="sm"
+                    className="font-medium"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              )}
               
               {hasRole('event_host') && (
                 <>
