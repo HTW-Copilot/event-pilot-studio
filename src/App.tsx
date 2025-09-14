@@ -5,9 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/components/AuthProvider";
 import Header from "./components/Header";
-import LoginPage from "./components/LoginPage";
 import Landing from "./pages/Landing";
+import Auth from "./pages/Auth";
 import HTWDashboard from "./pages/HTWDashboard";
+import EventHostDashboard from "./pages/EventHostDashboard";
 import Wizard from "./pages/Wizard";
 import Review from "./pages/Review";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
@@ -21,7 +22,7 @@ const ProtectedRoute = ({ children, requiredRole }: { children: React.ReactNode;
   const { isAuthenticated, hasRole } = useAuth();
   
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth" replace />;
   }
   
   if (requiredRole && !hasRole(requiredRole as any)) {
@@ -34,24 +35,19 @@ const ProtectedRoute = ({ children, requiredRole }: { children: React.ReactNode;
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
   
-  if (!isAuthenticated) {
-    return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/landing" element={<Landing />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    );
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
         <Routes>
-          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<HTWDashboard />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute requiredRole="event_host">
+              <EventHostDashboard />
+            </ProtectedRoute>
+          } />
           <Route path="/wizard" element={
             <ProtectedRoute requiredRole="event_host">
               <Wizard />

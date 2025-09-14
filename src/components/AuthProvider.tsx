@@ -1,10 +1,31 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { AuthState, User, UserRole } from '@/types/auth';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User, Session } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
+import { UserRole } from '@/types/auth';
+
+interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  roles: UserRole[];
+  org?: string;
+  bio?: string;
+  phone?: string;
+  avatar?: string;
+  verified_at?: string;
+}
+
+interface AuthState {
+  user: AuthUser | null;
+  session: Session | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
 
 interface AuthContextType extends AuthState {
-  login: (email: string, roles: UserRole[]) => void;
-  logout: () => void;
-  switchRole: (roles: UserRole[]) => void;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, name: string) => Promise<{ error: any }>;
+  signOut: () => Promise<void>;
   hasRole: (role: UserRole) => boolean;
 }
 
@@ -19,75 +40,159 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [authState, setAuthState] = useState<AuthState>({
-    user: {
-      id: '1',
-      email: 'demo@htwweek.org',
-      name: 'Demo User',
-      roles: ['event_host'],
-      org: 'HTW Demo',
-    },
-    isAuthenticated: true,
-    isLoading: false,
-  });
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = (email: string, roles: UserRole[]) => {
-    const primaryRole = roles[0];
-    const userName = primaryRole === 'htw_staff' ? 'HTW Staff' : 
-                    primaryRole === 'venue_host' ? 'Venue Host' : 'Event Host';
-    const userOrg = primaryRole === 'htw_staff' ? 'HTW Organization' : 'Demo Company';
+  useEffect(() => {
+    const fetchUserProfile = async (userId: string) => {
+      try {
+        console.log('Fetching user profile for:', userId);
+        
+        // Fetch user profile from our users table
+        const { data: profile, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .maybeSingle();
+        
+        console.log('Profile fetch result:', { profile, error });
+        
+        if (error) {
+          console.error('Error fetching profile:', error);
+        }
+        
+        if (profile) {
+          console.log('Setting user profile:', profile);
+          setUser({
+            id: profile.id,
+            email: profile.email,
+            name: profile.name,
+            roles: profile.roles || ['event_host'],
+            org: profile.org,
+            bio: profile.bio,
+            phone: profile.phone,
+            avatar: profile.avatar_url,
+            verified_at: profile.verified_at
+          });
+        } else {
+          console.log('No profile found, creating new one');
+          // Create user profile if it doesn't exist 
+          // Assign htw_staff role for admin email, event_host for others
+          const isAdmin = session?.user?.email === 'admin@test.com';
+          const roles: UserRole[] = isAdmin ? ['htw_staff'] : ['event_host'];
+          
+          const { data: newProfile, error: insertError } = await supabase
+            .from('users')
+            .insert({
+              id: userId,
+              email: session?.user?.email!,
+              name: session?.user?.user_metadata?.name || session?.user?.email!.split('@')[0],
+              roles: roles
+            })
+            .select()
+            .maybeSingle();
+          
+          console.log('New profile creation result:', { newProfile, insertError });
+          
+          if (newProfile) {
+            setUser({
+              id: newProfile.id,
+              email: newProfile.email,
+              name: newProfile.name,
+              roles: newProfile.roles || ['event_host'],
+              org: newProfile.org,
+              bio: newProfile.bio,
+              phone: newProfile.phone,
+              avatar: newProfile.avatar_url,
+              verified_at: newProfile.verified_at
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    setAuthState({
-      user: {
-        id: '1',
-        email,
-        name: userName,
-        roles,
-        org: userOrg,
-      },
-      isAuthenticated: true,
-      isLoading: false,
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        // Only synchronous state updates here
+        setSession(session);
+        
+        if (session?.user) {
+          // Defer Supabase calls with setTimeout to prevent deadlock
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
+        } else {
+          setUser(null);
+          setIsLoading(false);
+        }
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (!session) {
+        setIsLoading(false);
+      }
     });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    return { error };
   };
 
-  const logout = () => {
-    setAuthState({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
+  const signUp = async (email: string, password: string, name: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          name: name
+        }
+      }
     });
+    
+    return { error };
   };
 
-  const switchRole = (roles: UserRole[]) => {
-    if (authState.user) {
-      const primaryRole = roles[0];
-      const userName = primaryRole === 'htw_staff' ? 'HTW Staff' : 
-                      primaryRole === 'venue_host' ? 'Venue Host' : 'Event Host';
-      const userOrg = primaryRole === 'htw_staff' ? 'HTW Organization' : 'Demo Company';
-
-      setAuthState({
-        ...authState,
-        user: {
-          ...authState.user,
-          roles,
-          name: userName,
-          org: userOrg,
-        },
-      });
-    }
+  const signOut = async () => {
+    await supabase.auth.signOut();
   };
 
   const hasRole = (role: UserRole): boolean => {
-    return authState.user?.roles.includes(role) || false;
+    const result = user?.roles?.includes(role) || false;
+    console.log('hasRole check:', { role, userRoles: user?.roles, result });
+    return result;
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      ...authState, 
-      login, 
-      logout, 
-      switchRole, 
-      hasRole 
+    <AuthContext.Provider value={{
+      user,
+      session,
+      isAuthenticated: !!session,
+      isLoading,
+      signIn,
+      signUp,
+      signOut,
+      hasRole
     }}>
       {children}
     </AuthContext.Provider>
