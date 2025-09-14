@@ -198,6 +198,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "events_host_id_fkey"
+            columns: ["host_user_id"]
+            isOneToOne: false
+            referencedRelation: "hosts"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "fk_events_host_user_id"
             columns: ["host_user_id"]
             isOneToOne: false
